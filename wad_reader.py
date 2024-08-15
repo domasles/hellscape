@@ -15,6 +15,62 @@ class WADReader:
 
         return Vector2(x, y)
     
+    def read_node(self, offset):
+        node = Node()
+
+        node.x_part = self.read_2_bytes(offset, "h")
+        node.y_part = self.read_2_bytes(offset + 2, "h")
+        node.dx_part = self.read_2_bytes(offset + 4, "h")
+        node.dy_part = self.read_2_bytes(offset + 6, "h")
+
+        node.bounds["right"].top = self.read_2_bytes(offset + 8, "h")
+        node.bounds["right"].bottom = self.read_2_bytes(offset + 10, "h")
+        node.bounds["right"].left = self.read_2_bytes(offset + 12, "h")
+        node.bounds["right"].right = self.read_2_bytes(offset + 14, "h")
+
+        node.bounds["left"].top = self.read_2_bytes(offset + 16, "h")
+        node.bounds["left"].bottom = self.read_2_bytes(offset + 18, "h")
+        node.bounds["left"].left = self.read_2_bytes(offset + 20, "h")
+        node.bounds["left"].right = self.read_2_bytes(offset + 22, "h")
+
+        node.right_child = self.read_2_bytes(offset + 24, "H")
+        node.left_child = self.read_2_bytes(offset + 26, "H")
+
+        return node
+    
+    def read_sub_sector(self, offset):
+        sub_sector = SubSector()
+
+        sub_sector.seg_count = self.read_2_bytes(offset, "h")
+        sub_sector.first_seg = self.read_2_bytes(offset + 2, "h")
+
+        return sub_sector
+    
+    def read_segment(self, offset):
+        segment = Segment()
+
+        segment.start_vertex = self.read_2_bytes(offset, "h")
+        segment.end_vertex = self.read_2_bytes(offset + 2, "h")
+        segment.angle = self.read_2_bytes(offset + 4, "h")
+        segment.linedef = self.read_2_bytes(offset + 6, "h")
+        segment.direction = self.read_2_bytes(offset + 8, "h")
+        segment.offset = self.read_2_bytes(offset + 10, "h")
+
+        return segment
+    
+    def read_thing(self, offset):
+        thing = Thing()
+
+        x = self.read_2_bytes(offset, "h")
+        y = self.read_2_bytes(offset + 2, "h")
+
+        thing.angle = self.read_2_bytes(offset + 4, "H")
+        thing.type = self.read_2_bytes(offset + 6, "H")
+        thing.flags = self.read_2_bytes(offset + 8, "H")
+        thing.pos = Vector2(x, y)
+
+        return thing
+    
     def read_linedef(self, offset):
         linedef = Linedef()
 

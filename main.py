@@ -1,6 +1,8 @@
 from renderer import Renderer
 from wad_data import WADData
+from player import Player
 from settings import *
+from bsp import BSP
 
 import pygame, sys
 
@@ -17,16 +19,22 @@ class Engine:
     def on_init(self):
         self.data = WADData(self, "E1M1")
         self.renderer = Renderer(self)
+        self.player = Player(self)
+        self.bsp = BSP(self)
 
     def update(self):
+        self.player.update()
+        self.bsp.update()
+
         self.d_time = self.clock.tick()
 
-        pygame.display.flip()
         pygame.display.set_caption(f"{self.clock.get_fps()}")
 
     def draw(self):
         self.screen.fill("black")
         self.renderer.draw()
+
+        pygame.display.flip()
 
     def get_wad(self):
         if len(sys.argv) != 2:
